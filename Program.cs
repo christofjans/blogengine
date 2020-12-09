@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 var serviceProvider = CreateServiceProvider();
 var processor = serviceProvider.GetService<IProcessor>();
@@ -24,6 +25,7 @@ IServiceProvider CreateServiceProvider()
     serviceCollection.AddSingleton<IMarkdownToHtmlConverter, MarkDigConverter>();
     serviceCollection.AddSingleton<ITemplateEngine, HandlebarsTemplateEngine>();
     serviceCollection.AddSingleton<IPostFinder, PostFinder>();
+    serviceCollection.AddLogging(lb=>lb.AddConsole());
     
     return serviceCollection.BuildServiceProvider();
 }

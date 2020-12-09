@@ -10,6 +10,8 @@
     <PackageReference Include="Handlebars.Net" Version="2.0.2" />
     <PackageReference Include="Markdig" Version="0.22.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
     <PackageReference Include="System.IO.Abstractions" Version="13.2.4" />
   </ItemGroup>
 
