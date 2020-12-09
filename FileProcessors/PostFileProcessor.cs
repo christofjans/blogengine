@@ -26,9 +26,9 @@ public class PostFileProcessor : IFileProcessor
         var templatePath = Path.Combine(Path.GetDirectoryName(filePath) ?? "", "post.template.html");
         var data = new {
             html = html,
+            posts = posts.ToViewModel(),
             title = post.Title,
             date = post.Date.ToString("yyyy-MM-dd"),
-            post = posts.ToViewModel()
         };
         html = templateEngine.Merge(templatePath, data);
 

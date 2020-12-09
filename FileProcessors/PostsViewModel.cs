@@ -2,16 +2,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+public record PostViewModel(string Title, string Date, string FileName);
+
 public static class PostsViewModel
 {
-    public static Post[] ToViewModel(this Dictionary<string, Post> posts) =>
+    public static PostViewModel[] ToViewModel(this Dictionary<string, Post> posts) =>
         posts.Values
-            .Select(p=>new Post
-            {
-                Title = p.Title,
-                Date = p.Date,
-                FilePath = Path.GetFileName(p.FilePath)
-            })
             .OrderByDescending(p=>p.Date)
+            .Select(p=>new PostViewModel(p.Title, p.Date.ToString("yyyy-MM-dd"), Path.GetFileName(p.FilePath)))
             .ToArray();
 }
