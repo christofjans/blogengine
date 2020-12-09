@@ -22,27 +22,24 @@ public class PostFinder : IPostFinder
         foreach (var filePath in this.fileSystem.Directory.GetFiles(inputDir, "*.md"))
         {
             var firstLine = this.fileSystem.File.ReadLines(filePath).FirstOrDefault() ?? "";
-            var post = TryGetPost(firstLine);
-            if (post!=null) 
+            var miniPost = TryGetPost(firstLine);
+            if (miniPost!=null) 
             {
-                post.FilePath = filePath;
-                Console.WriteLine(post.FilePath);
-                yield return post;
+                yield return new Post
+                {
+                    FilePath = filePath,
+                    Title = miniPost.title,
+                    Date = miniPost.date
+                };
             }
         }
     }
 
-    private static Post? TryGetPost(string firstLine)
+    private static MiniPost? TryGetPost(string firstLine)
     {
         try
         {
-            var mp = JsonSerializer.Deserialize<MiniPost>(firstLine);
-            if (mp==null) return null;
-            return new Post
-            {
-                Title = mp.title,
-                Date = mp.date
-            };
+            return JsonSerializer.Deserialize<MiniPost>(firstLine);
         }
         catch (Exception)
         {

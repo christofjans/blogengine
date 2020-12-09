@@ -1,8 +1,8 @@
 using System;
 
-public class Post
+public record Post
 {
-    public string FilePath {get;set;} = "";
+    public string FilePath {get;init;} = "";
     public string Title {get;init;} = "";
     public DateTime Date {get;init;}
 }
