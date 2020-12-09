@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Linq;
@@ -26,6 +27,7 @@ public class Processor : IProcessor
         {
             ProcessFile(posts, filePath, outputDir);
             logger.LogInformation("processed {filePath}", filePath);
+            //Console.WriteLine("sdfdsafdsfdsa");
         }
     }
 

@@ -1,9 +1,8 @@
-﻿using System;
-using System.IO.Abstractions;
+﻿using System.IO.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-var serviceProvider = CreateServiceProvider();
+using var serviceProvider = CreateServiceProvider();
 var processor = serviceProvider.GetService<IProcessor>();
 
 processor!.Process(args[0], args[1]);
@@ -11,7 +10,8 @@ processor!.Process(args[0], args[1]);
 
 
 
-IServiceProvider CreateServiceProvider()
+
+ServiceProvider CreateServiceProvider()
 {
     var serviceCollection = new ServiceCollection();
 
