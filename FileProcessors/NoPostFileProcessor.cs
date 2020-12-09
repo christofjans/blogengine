@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 
 public class NoPostFileProcessor : IFileProcessor
 {
@@ -19,7 +20,8 @@ public class NoPostFileProcessor : IFileProcessor
 
         var templatePath = Path.Combine(Path.GetDirectoryName(filePath) ?? "", "nopost.template.html");
         var data = new {
-            html = html
+            html = html,
+            posts = posts.ToViewModel()
         };
         html = templateEngine.Merge(templatePath, data);
 

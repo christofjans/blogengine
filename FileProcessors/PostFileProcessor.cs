@@ -27,7 +27,8 @@ public class PostFileProcessor : IFileProcessor
         var data = new {
             html = html,
             title = post.Title,
-            date = post.Date.ToString("yyyy-MM-dd")
+            date = post.Date.ToString("yyyy-MM-dd"),
+            post = posts.ToViewModel()
         };
         html = templateEngine.Merge(templatePath, data);
 
