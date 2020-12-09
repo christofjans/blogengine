@@ -20,7 +20,7 @@ public class DispatchFileProcessor : IFileProcessor
     {
         var fname = Path.GetFileName(filePath);
         bool isTemplate = fname.Contains(".template.");
-        bool isPost = posts.ContainsKey(fname);
+        bool isPost = posts.ContainsKey(filePath);
         string extension = Path.GetExtension(filePath);
 
         var fileProcessor = GetFileProcessor(fname, isTemplate, isPost, extension);
@@ -31,10 +31,12 @@ public class DispatchFileProcessor : IFileProcessor
     private IFileProcessor GetFileProcessor(string fname, bool isTemplate, bool isPost, string extension) =>
         (fname, isTemplate, isPost, extension) switch
         {
-            (_, _, true, _)         => postFileProcessor,
-            (_, _, false, ".md")    => noPostFileProcessor,
-            (_, true, _, _)         => noopFileProcessor,
-            _                       => copyFileProcessor
+            (_, _, true, _)             => postFileProcessor,
+            //("about.md",_,_,_)          => aboutFileProcessor,
+            (_, _, false, ".md")        => noPostFileProcessor,
+            //("index.template.html")     => indexFileProcessor,
+            (_, true, _, _)             => noopFileProcessor,
+            _                           => copyFileProcessor
         };
 
     private IFileProcessor postFileProcessor;
