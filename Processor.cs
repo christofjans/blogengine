@@ -30,7 +30,8 @@ public class Processor : IProcessor
 
     private IEnumerable<Post> GetPosts(string inputDir)
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
+        yield break;
     }
 
     private IFileSystem fileSystem;

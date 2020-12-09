@@ -21,6 +21,7 @@ IServiceProvider CreateServiceProvider()
     serviceCollection.AddSingleton<CopyFileProcessor>();
     serviceCollection.AddSingleton<PostFileProcessor>();
     serviceCollection.AddSingleton<NoPostFileProcessor>();
+    serviceCollection.AddSingleton<IMarkdownToHtmlConverter, MarkDigConverter>();
     
     return serviceCollection.BuildServiceProvider();
 }
