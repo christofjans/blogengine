@@ -22,6 +22,7 @@ IServiceProvider CreateServiceProvider()
     serviceCollection.AddSingleton<PostFileProcessor>();
     serviceCollection.AddSingleton<NoPostFileProcessor>();
     serviceCollection.AddSingleton<IMarkdownToHtmlConverter, MarkDigConverter>();
+    serviceCollection.AddSingleton<ITemplateEngine, HandlebarsTemplateEngine>();
     
     return serviceCollection.BuildServiceProvider();
 }
