@@ -9,6 +9,6 @@ public static class PostsViewModel
     public static PostViewModel[] ToViewModel(this Dictionary<string, Post> posts) =>
         posts.Values
             .OrderByDescending(p=>p.Date)
-            .Select(p=>new PostViewModel(p.Title, p.Date.ToString("yyyy-MM-dd"), Path.GetFileName(p.FilePath)))
+            .Select(p=>new PostViewModel(p.Title, p.Date.ToString("yyyy-MM-dd"), Path.GetFileNameWithoutExtension(p.FilePath)+".html"))
             .ToArray();
 }

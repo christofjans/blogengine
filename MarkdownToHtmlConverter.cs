@@ -7,5 +7,12 @@ public interface IMarkdownToHtmlConverter
 
 public class MarkDigConverter : IMarkdownToHtmlConverter
 {
-    public string Convert(string markDown) => Markdown.ToHtml(markDown);
+    public MarkDigConverter()
+    {
+        this.pipeline = (new MarkdownPipelineBuilder()).UseAdvancedExtensions().Build();
+    }
+
+    public string Convert(string markDown) => Markdown.ToHtml(markDown, this.pipeline);
+
+    private MarkdownPipeline pipeline;
 }
