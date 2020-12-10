@@ -21,24 +21,26 @@ public class PostFinder : IPostFinder
         foreach (var filePath in this.fileSystem.Directory.GetFiles(inputDir, "*.md"))
         {
             var firstLine = this.fileSystem.File.ReadLines(filePath).FirstOrDefault() ?? "";
-            var miniPost = TryGetPost(firstLine);
-            if (miniPost!=null) 
+            var header = TryGetPost(firstLine);
+            if (header!=null) 
             {
                 yield return new Post
                 {
                     FilePath = filePath,
-                    Title = miniPost.title,
-                    Date = miniPost.date
+                    Title = header.title,
+                    Date = header.date,
+                    Template = header.template,
+                    Rss = !header.norss
                 };
             }
         }
     }
 
-    private static MiniPost? TryGetPost(string firstLine)
+    private static PostHeader? TryGetPost(string firstLine)
     {
         try
         {
-            return JsonSerializer.Deserialize<MiniPost>(firstLine);
+            return JsonSerializer.Deserialize<PostHeader>(firstLine);
         }
         catch (Exception)
         {
@@ -49,8 +51,10 @@ public class PostFinder : IPostFinder
     private IFileSystem fileSystem;
 }
 
-class MiniPost
+class PostHeader
 {
     public string title {get;set;} = "";
     public DateTime date {get;set;}
+    public string? template {get;set;}
+    public bool norss {get;set;}
 }

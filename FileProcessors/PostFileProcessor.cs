@@ -20,12 +20,11 @@ public class PostFileProcessor : IFileProcessor
         var post = posts[filePath];
 
         string text = this.fileSystem.File.ReadAllText(filePath);
-        //text = string.Join(Environment.NewLine, text.Split(Environment.NewLine.ToCharArray()).Skip(1));
         text = string.Join(Environment.NewLine, Regex.Split(text, "\r\n|\r|\n").Skip(1));
 
         var html = markdownToHtmlConverter.Convert(text);
 
-        var templatePath = Path.Combine(Path.GetDirectoryName(filePath) ?? "", "post.template.html");
+        var templatePath = Path.Combine(Path.GetDirectoryName(filePath) ?? "", post.Template ?? "post.template.html");
         var data = new {
             html = html,
             posts = posts.ToViewModel(),
