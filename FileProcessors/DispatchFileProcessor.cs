@@ -35,7 +35,7 @@ public class DispatchFileProcessor : IFileProcessor
         {
             (_,         _,      true,   _    )  => postFileProcessor,
             (_,         _,      false,  ".md")  => noPostFileProcessor,
-            //("rss.xml", _,      _,      _    )  => rssXmlProcessor,
+            ("rss.json", _,      _,      _    ) => rssXmlProcessor,
             (_,         true,   _,      _    )  => noopFileProcessor,
             _                                   => copyFileProcessor
         };

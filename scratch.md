@@ -40,6 +40,9 @@ titlen_2    yadayda
 * use [Handlebars.net](https://www.nuget.org/packages/Handlebars.Net/) for templating
 * use [markdig](https://github.com/lunet-io/markdig) for markdown .
 * use [KaTex](https://katex.org/) ?
-* use [rss](https://www.nuget.org/packages/WilderMinds.RssSyndication/) ?
 * usecases uses System.IO.Abstractions ?
 
+
+* use [rss](https://www.nuget.org/packages/WilderMinds.RssSyndication/) ?
+* clean output directory ?
+* recursive input directory ?
