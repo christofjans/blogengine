@@ -9,7 +9,10 @@ public class MarkDigConverter : IMarkdownToHtmlConverter
 {
     public MarkDigConverter()
     {
-        this.pipeline = (new MarkdownPipelineBuilder()).UseAdvancedExtensions().Build();
+        this.pipeline = (new MarkdownPipelineBuilder())
+            .UsePipeTables()
+            .UseMediaLinks()
+            .Build();
     }
 
     public string Convert(string markDown) => Markdown.ToHtml(markDown, this.pipeline);
