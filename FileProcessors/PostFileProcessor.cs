@@ -18,6 +18,7 @@ public class PostFileProcessor : IFileProcessor
     {
         var outputFilePath = Path.Combine(outputDir, Path.GetFileNameWithoutExtension(filePath)+".html");
         var post = posts[filePath];
+        if (post.Date>DateTime.Now) return;
 
         string text = this.fileSystem.File.ReadAllText(filePath);
         text = string.Join(Environment.NewLine, Regex.Split(text, "\r\n|\r|\n").Skip(1));

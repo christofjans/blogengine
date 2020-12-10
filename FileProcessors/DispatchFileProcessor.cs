@@ -32,7 +32,6 @@ public class DispatchFileProcessor : IFileProcessor
         (fname, isTemplate, isPost, extension) switch
         {
             (_, _, true, _)             => postFileProcessor,
-            //("about.md",_,_,_)          => aboutFileProcessor,
             (_, _, false, ".md")        => noPostFileProcessor,
             //("index.template.html")     => indexFileProcessor,
             (_, true, _, _)             => noopFileProcessor,

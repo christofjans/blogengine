@@ -27,7 +27,6 @@ public class Processor : IProcessor
         {
             ProcessFile(posts, filePath, outputDir);
             logger.LogInformation("processed {filePath}", filePath);
-            //Console.WriteLine("sdfdsafdsfdsa");
         }
     }
 
