@@ -33,7 +33,6 @@ public class DispatchFileProcessor : IFileProcessor
         {
             (_, _, true, _)             => postFileProcessor,
             (_, _, false, ".md")        => noPostFileProcessor,
-            //("index.template.html")     => indexFileProcessor,
             (_, true, _, _)             => noopFileProcessor,
             _                           => copyFileProcessor
         };
