@@ -22,9 +22,11 @@ ServiceProvider CreateServiceProvider()
     serviceCollection.AddSingleton<CopyFileProcessor>();
     serviceCollection.AddSingleton<PostFileProcessor>();
     serviceCollection.AddSingleton<NoPostFileProcessor>();
+    serviceCollection.AddSingleton<RssXmlProcessor>();
     serviceCollection.AddSingleton<IMarkdownToHtmlConverter, MarkDigConverter>();
     serviceCollection.AddSingleton<ITemplateEngine, HandlebarsTemplateEngine>();
     serviceCollection.AddSingleton<IPostFinder, PostFinder>();
+    serviceCollection.AddSingleton<IDirectoryProcessor, DirectoryProcessor>();
     serviceCollection.AddLogging(lb=>lb.AddConsole());
     
     return serviceCollection.BuildServiceProvider();

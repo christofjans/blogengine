@@ -7,13 +7,15 @@ public class DispatchFileProcessor : IFileProcessor
         NoopFileProcessor noopFileProcessor,
         CopyFileProcessor copyFileProcessor,
         NoPostFileProcessor markdownFileProcessor,
-        PostFileProcessor postFileProcessor
+        PostFileProcessor postFileProcessor,
+        RssXmlProcessor rssXmlProcessor
     )
     {
         this.noopFileProcessor = noopFileProcessor;
         this.copyFileProcessor = copyFileProcessor;
         this.postFileProcessor = postFileProcessor;
         this.noPostFileProcessor = markdownFileProcessor;
+        this.rssXmlProcessor = rssXmlProcessor;
     }
 
     public void ProcessFile(Dictionary<string, Post> posts, string filePath, string outputDir)
@@ -31,14 +33,16 @@ public class DispatchFileProcessor : IFileProcessor
     private IFileProcessor GetFileProcessor(string fname, bool isTemplate, bool isPost, string extension) =>
         (fname, isTemplate, isPost, extension) switch
         {
-            (_, _, true, _)             => postFileProcessor,
-            (_, _, false, ".md")        => noPostFileProcessor,
-            (_, true, _, _)             => noopFileProcessor,
-            _                           => copyFileProcessor
+            (_,         _,      true,   _    )  => postFileProcessor,
+            (_,         _,      false,  ".md")  => noPostFileProcessor,
+            //("rss.xml", _,      _,      _    )  => rssXmlProcessor,
+            (_,         true,   _,      _    )  => noopFileProcessor,
+            _                                   => copyFileProcessor
         };
 
     private IFileProcessor postFileProcessor;
     private IFileProcessor noopFileProcessor;
     private IFileProcessor copyFileProcessor;
     private IFileProcessor noPostFileProcessor;
+    private IFileProcessor rssXmlProcessor;
 }
