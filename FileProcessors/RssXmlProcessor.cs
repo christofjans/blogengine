@@ -31,7 +31,7 @@ public class RssXmlProcessor : IFileProcessor
 
         foreach (var post in rssPosts)
         {
-            string url = string.Format(config.PostUrlTemplate, UrlEncode(post.FileName));
+            string url = string.Format(config.PostUrlTemplate, post.FileName);
             Item item = new()
             {
                 Title = post.Title,
