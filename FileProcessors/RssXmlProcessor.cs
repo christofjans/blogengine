@@ -35,7 +35,7 @@ public class RssXmlProcessor : IFileProcessor
             Item item = new()
             {
                 Title = post.Title,
-                Body = "todo",
+                Body = post.Summary,
                 Link = new Uri(url),
                 Permalink = url,
                 PublishDate = DateTime.Parse(post.Date),

@@ -20,7 +20,8 @@ public class PostFinder : IPostFinder
     {
         foreach (var filePath in this.fileSystem.Directory.GetFiles(inputDir, "*.md"))
         {
-            var firstLine = this.fileSystem.File.ReadLines(filePath).FirstOrDefault() ?? "";
+            var lines = this.fileSystem.File.ReadAllLines(filePath);
+            string firstLine = lines.FirstOrDefault() ?? "";
             var header = TryGetPost(firstLine);
             if (header!=null) 
             {
@@ -30,7 +31,8 @@ public class PostFinder : IPostFinder
                     Title = header.title,
                     Date = header.date,
                     Template = header.template,
-                    Rss = !header.norss
+                    Rss = !header.norss,
+                    Summary = lines.Skip(1).SkipWhile(l=>string.IsNullOrWhiteSpace(l)).FirstOrDefault() ?? header.title
                 };
             }
         }

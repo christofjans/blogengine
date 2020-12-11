@@ -16,17 +16,18 @@ public class PostFileProcessor : IFileProcessor
 
     public void ProcessFile(Dictionary<string, Post> posts, string filePath, string outputDir)
     {
-        var outputFilePath = Path.Combine(outputDir, Path.GetFileNameWithoutExtension(filePath)+".html");
+        var outputFilePath = Path.Combine(outputDir, Path.GetFileNameWithoutExtension(filePath) + ".html");
         var post = posts[filePath];
-        if (post.Date>DateTime.Now) return;
+        if (post.Date > DateTime.Now) return;
 
         string text = this.fileSystem.File.ReadAllText(filePath);
-        text = string.Join(Environment.NewLine, Regex.Split(text, "\r\n|\r|\n").Skip(1));
+        text = SkipFirstLine(text);
 
         var html = markdownToHtmlConverter.Convert(text);
 
         var templatePath = Path.Combine(Path.GetDirectoryName(filePath) ?? "", post.Template ?? "post.template.html");
-        var data = new {
+        var data = new
+        {
             html = html,
             posts = posts.ToViewModel(),
             title = post.Title,
@@ -36,6 +37,9 @@ public class PostFileProcessor : IFileProcessor
 
         this.fileSystem.File.WriteAllText(outputFilePath, html);
     }
+
+    private static string SkipFirstLine(string text) =>
+        string.Join(Environment.NewLine, Regex.Split(text, "\r\n|\r|\n").Skip(1));
 
     private IFileSystem fileSystem;
     private IMarkdownToHtmlConverter markdownToHtmlConverter;
