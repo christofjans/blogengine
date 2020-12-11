@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 
 public class NoPostFileProcessor : IFileProcessor
 {
@@ -13,14 +15,19 @@ public class NoPostFileProcessor : IFileProcessor
 
     public void ProcessFile(Dictionary<string, Post> posts, string filePath, string outputDir)
     {
-        var outputFilePath = Path.Combine(outputDir, Path.GetFileNameWithoutExtension(filePath)+".html");
+        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
+        var outputFilePath = Path.Combine(outputDir, fileNameWithoutExtension+".html");
 
-        var html = markdownToHtmlConverter.Convert(this.fileSystem.File.ReadAllText(filePath));
+        var lines = this.fileSystem.File.ReadAllLines(filePath);
+        string title = lines.FirstOrDefault(line=>line.Trim().StartsWith("# "))?.Substring(2) ?? fileNameWithoutExtension;
+
+        var html = markdownToHtmlConverter.Convert(string.Join(Environment.NewLine, lines));
 
         var templatePath = Path.Combine(Path.GetDirectoryName(filePath) ?? "", "nopost.template.html");
         var data = new {
             html = html,
-            posts = posts.ToViewModel()
+            posts = posts.ToViewModel(),
+            title = title
         };
         html = templateEngine.Merge(templatePath, data);
 
