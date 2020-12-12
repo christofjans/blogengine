@@ -33,11 +33,12 @@ public class DispatchFileProcessor : IFileProcessor
     private IFileProcessor GetFileProcessor(string fname, bool isTemplate, bool isPost, string extension) =>
         (fname, isTemplate, isPost, extension) switch
         {
-            (_,         _,      true,   _    )  => postFileProcessor,
-            (_,         _,      false,  ".md")  => noPostFileProcessor,
-            ("rss.json", _,      _,      _    ) => rssXmlProcessor,
-            (_,         true,   _,      _    )  => noopFileProcessor,
-            _                                   => copyFileProcessor
+            (_,             _,      true,   _    )  => postFileProcessor,
+            ("README.md",   _,      false,  _    )  => copyFileProcessor,
+            (_,             _,      false,  ".md")  => noPostFileProcessor,
+            ("rss.json",    _,      _,      _    )  => rssXmlProcessor,
+            (_,             true,   _,      _    )  => noopFileProcessor,
+            _                                       => copyFileProcessor
         };
 
     private IFileProcessor postFileProcessor;
