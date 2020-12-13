@@ -12,6 +12,7 @@ public class MarkDigConverter : IMarkdownToHtmlConverter
         this.pipeline = (new MarkdownPipelineBuilder())
             .UsePipeTables()
             .UseMediaLinks()
+            .UseEmphasisExtras()
             .Build();
     }
 
