@@ -32,6 +32,7 @@ public class PostFinder : IPostFinder
                     Date = header.date,
                     Template = header.template,
                     Rss = !header.norss,
+                    Math = header.math,
                     Summary = lines.Skip(1).SkipWhile(l=>string.IsNullOrWhiteSpace(l)).FirstOrDefault() ?? header.title
                 };
             }
@@ -59,4 +60,5 @@ class PostHeader
     public DateTime date {get;set;}
     public string? template {get;set;}
     public bool norss {get;set;}
+    public bool math {get;set;}
 }

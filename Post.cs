@@ -8,4 +8,5 @@ public record Post
     public string? Template {get;init;}
     public bool Rss {get;init;}
     public string Summary {get;init;} = "todo";
+    public bool Math {get;init;}
 }
