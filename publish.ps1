@@ -1,0 +1,1 @@
+dotnet publish ./blogengine.csproj -c Release -r win-x64
