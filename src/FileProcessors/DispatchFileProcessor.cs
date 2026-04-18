@@ -8,7 +8,8 @@ public class DispatchFileProcessor(
     CopyFileProcessor copyFileProcessor,
     PostFileProcessor postFileProcessor,
     RssXmlProcessor rssXmlProcessor,
-    NoPostFileProcessor noPostFileProcessor
+    NoPostFileProcessor noPostFileProcessor,
+    TypeScriptFileProcessor typeScriptFileProcessor
     ) : IFileProcessor
 {
     public void ProcessFile(Dictionary<string, Post> posts, string filePath, string outputDir)
@@ -31,6 +32,7 @@ public class DispatchFileProcessor(
             (_, _, false, ".md") => noPostFileProcessor,
             ("rss.json", _, _, _) => rssXmlProcessor,
             (_, true, _, _) => noopFileProcessor,
+            (_, _, false, ".ts") => typeScriptFileProcessor,
             _ => copyFileProcessor
         };
 }

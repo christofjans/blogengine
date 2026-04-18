@@ -14,6 +14,7 @@ BlogEngine is a simple blog engine. It takes a bunch of markdown files as its in
 
 - Always run `dotnet format` after making any changes
 - Always run `dotnet build` after making any changes
+- Always run `dotnet test` after making any changes
 - Never commit anything to git
 - Do not try to run the application
 

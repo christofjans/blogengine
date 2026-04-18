@@ -2,4 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/blogengine.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests\BlogEngine.Tests\BlogEngine.Tests.csproj" />
+  </Folder>
 </Solution>

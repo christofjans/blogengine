@@ -22,11 +22,14 @@ static ServiceProvider CreateServiceProvider()
     serviceCollection.AddSingleton<IProcessor, Processor>();
     serviceCollection.AddSingleton<IFileSystem, FileSystem>();
     serviceCollection.AddSingleton<IFileProcessor, DispatchFileProcessor>();
+    serviceCollection.AddSingleton<IProcessRunner, ProcessRunner>();
+    serviceCollection.AddSingleton<ITypeScriptCompiler, TypeScriptCompiler>();
     serviceCollection.AddSingleton<NoopFileProcessor>();
     serviceCollection.AddSingleton<CopyFileProcessor>();
     serviceCollection.AddSingleton<PostFileProcessor>();
     serviceCollection.AddSingleton<NoPostFileProcessor>();
     serviceCollection.AddSingleton<RssXmlProcessor>();
+    serviceCollection.AddSingleton<TypeScriptFileProcessor>();
     serviceCollection.AddSingleton<IMarkdownToHtmlConverter, MarkDigConverter>();
     serviceCollection.AddSingleton<ITemplateEngine, HandlebarsTemplateEngine>();
     serviceCollection.AddSingleton<IPostFinder, PostFinder>();
