@@ -122,6 +122,45 @@ public class DirectoryProcessorTests
         Assert.False(File.Exists(Path.Combine(outputDir, "scripts", "app.ts")));
     }
 
+    [Fact]
+    public void Process_ClearsExistingOutputContentsButPreservesGitEntries()
+    {
+        using var tempDirectory = new TemporaryDirectory();
+        string inputDir = Path.Combine(tempDirectory.Path, "input");
+        string outputDir = Path.Combine(tempDirectory.Path, "output");
+        Directory.CreateDirectory(inputDir);
+        Directory.CreateDirectory(outputDir);
+        Directory.CreateDirectory(Path.Combine(outputDir, "stale"));
+        Directory.CreateDirectory(Path.Combine(outputDir, ".git"));
+
+        string inputFilePath = Path.Combine(inputDir, "site.css");
+        string staleFilePath = Path.Combine(outputDir, "stale.txt");
+        string staleNestedFilePath = Path.Combine(outputDir, "stale", "old.txt");
+        string preservedGitFilePath = Path.Combine(outputDir, ".git", "HEAD");
+        string preservedGitIgnorePath = Path.Combine(outputDir, ".gitignore");
+        string preservedTypoGitIgnorePath = Path.Combine(outputDir, ".gitignrore");
+
+        File.WriteAllText(inputFilePath, "body {}");
+        File.WriteAllText(staleFilePath, "remove me");
+        File.WriteAllText(staleNestedFilePath, "remove me too");
+        File.WriteAllText(preservedGitFilePath, "ref: refs/heads/main");
+        File.WriteAllText(preservedGitIgnorePath, "bin/");
+        File.WriteAllText(preservedTypoGitIgnorePath, "obj/");
+
+        var recordingProcessor = new RecordingFileProcessor();
+        var processor = new DirectoryProcessor(new FileSystem(), recordingProcessor, NullLogger<DirectoryProcessor>.Instance);
+
+        processor.Process([], inputDir, outputDir);
+
+        Assert.Contains((inputFilePath, outputDir), recordingProcessor.ProcessedFiles);
+        Assert.False(File.Exists(staleFilePath));
+        Assert.False(Directory.Exists(Path.Combine(outputDir, "stale")));
+        Assert.True(Directory.Exists(Path.Combine(outputDir, ".git")));
+        Assert.Equal("ref: refs/heads/main", File.ReadAllText(preservedGitFilePath));
+        Assert.Equal("bin/", File.ReadAllText(preservedGitIgnorePath));
+        Assert.Equal("obj/", File.ReadAllText(preservedTypoGitIgnorePath));
+    }
+
     private sealed class RecordingFileProcessor : IFileProcessor
     {
         public List<(string FilePath, string OutputDir)> ProcessedFiles { get; } = [];

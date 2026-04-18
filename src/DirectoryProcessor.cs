@@ -18,6 +18,8 @@ public class DirectoryProcessor(IFileSystem fileSystem, IFileProcessor fileProce
 {
     public void Process(Dictionary<string, Post> posts, string inputDir, string outputDir)
     {
+        PrepareOutputDirectory(outputDir);
+
         foreach (var filePath in GetFilesToProcess(inputDir))
         {
             var fileOutputDir = GetOutputDirectory(inputDir, outputDir, filePath);
@@ -30,6 +32,23 @@ public class DirectoryProcessor(IFileSystem fileSystem, IFileProcessor fileProce
     private IEnumerable<string> GetFilesToProcess(string inputDir) =>
         EnumerateFiles(inputDir)
             .Where(filePath => IsRootFile(inputDir, filePath) || !IsRootOnlyFile(filePath));
+
+    private void PrepareOutputDirectory(string outputDir)
+    {
+        this.fileSystem.Directory.CreateDirectory(outputDir);
+
+        foreach (var filePath in this.fileSystem.Directory.GetFiles(outputDir)
+                     .Where(filePath => !IsPreservedOutputFile(filePath)))
+        {
+            this.fileSystem.File.Delete(filePath);
+        }
+
+        foreach (var directoryPath in this.fileSystem.Directory.GetDirectories(outputDir)
+                     .Where(directoryPath => !IsPreservedOutputDirectory(directoryPath)))
+        {
+            this.fileSystem.Directory.Delete(directoryPath, recursive: true);
+        }
+    }
 
     private IEnumerable<string> EnumerateFiles(string directoryPath)
     {
@@ -78,6 +97,19 @@ public class DirectoryProcessor(IFileSystem fileSystem, IFileProcessor fileProce
             this.fileSystem.Path.GetFileName(directoryPath),
             ".git",
             StringComparison.OrdinalIgnoreCase);
+
+    private bool IsPreservedOutputDirectory(string directoryPath) =>
+        string.Equals(
+            this.fileSystem.Path.GetFileName(directoryPath),
+            ".git",
+            StringComparison.OrdinalIgnoreCase);
+
+    private bool IsPreservedOutputFile(string filePath)
+    {
+        var fileName = this.fileSystem.Path.GetFileName(filePath);
+
+        return string.Equals(fileName, ".gitignore", StringComparison.OrdinalIgnoreCase);
+    }
 
     private void ProcessFile(Dictionary<string, Post> posts, string filePath, string outputDir) =>
         this.fileProcessor.ProcessFile(posts, filePath, outputDir);
