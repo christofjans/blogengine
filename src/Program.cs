@@ -1,4 +1,8 @@
 ﻿using System.IO.Abstractions;
+
+using BlogEngine;
+using BlogEngine.FileProcessors;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -11,7 +15,7 @@ processor!.Process(args[0], args[1]);
 
 
 
-ServiceProvider CreateServiceProvider()
+static ServiceProvider CreateServiceProvider()
 {
     var serviceCollection = new ServiceCollection();
 
@@ -27,7 +31,7 @@ ServiceProvider CreateServiceProvider()
     serviceCollection.AddSingleton<ITemplateEngine, HandlebarsTemplateEngine>();
     serviceCollection.AddSingleton<IPostFinder, PostFinder>();
     serviceCollection.AddSingleton<IDirectoryProcessor, DirectoryProcessor>();
-    serviceCollection.AddLogging(lb=>lb.AddConsole());
-    
+    serviceCollection.AddLogging(lb => lb.AddConsole());
+
     return serviceCollection.BuildServiceProvider();
 }

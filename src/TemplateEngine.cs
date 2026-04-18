@@ -1,5 +1,8 @@
+namespace BlogEngine;
+
 using System.Collections.Generic;
 using System.IO.Abstractions;
+
 using HandlebarsDotNet;
 
 public interface ITemplateEngine
@@ -12,7 +15,7 @@ public class HandlebarsTemplateEngine : ITemplateEngine
     public HandlebarsTemplateEngine(IFileSystem fileSystem)
     {
         this.fileSystem = fileSystem;
-        this.templates = new();
+        this.templates = [];
     }
 
     public string Merge(string templatePath, object data)
@@ -25,6 +28,6 @@ public class HandlebarsTemplateEngine : ITemplateEngine
         return template(data);
     }
 
-    private IFileSystem fileSystem;
-    private Dictionary<string, HandlebarsTemplate<object,object>> templates;
+    private readonly IFileSystem fileSystem;
+    private readonly Dictionary<string, HandlebarsTemplate<object, object>> templates;
 }

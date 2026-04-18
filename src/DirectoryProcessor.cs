@@ -1,21 +1,19 @@
+namespace BlogEngine;
+
 using System.Collections.Generic;
 using System.IO.Abstractions;
+
+using BlogEngine.FileProcessors;
+
 using Microsoft.Extensions.Logging;
 
 public interface IDirectoryProcessor
 {
-    public void Process(Dictionary<string,Post> posts, string inputDir, string outputDir);
+    public void Process(Dictionary<string, Post> posts, string inputDir, string outputDir);
 }
 
-public class DirectoryProcessor : IDirectoryProcessor
+public class DirectoryProcessor(IFileSystem fileSystem, IFileProcessor fileProcessor, ILogger<DirectoryProcessor> logger) : IDirectoryProcessor
 {
-    public DirectoryProcessor(IFileSystem fileSystem, IFileProcessor fileProcessor, ILogger<DirectoryProcessor> logger)
-    {
-        this.fileSystem = fileSystem;
-        this.fileProcessor = fileProcessor;
-        this.logger = logger;
-    }
-
     public void Process(Dictionary<string, Post> posts, string inputDir, string outputDir)
     {
         foreach (var filePath in this.fileSystem.Directory.GetFiles(inputDir))
@@ -28,7 +26,7 @@ public class DirectoryProcessor : IDirectoryProcessor
     private void ProcessFile(Dictionary<string, Post> posts, string filePath, string outputDir) =>
         this.fileProcessor.ProcessFile(posts, filePath, outputDir);
 
-    private IFileSystem fileSystem;
-    private IFileProcessor fileProcessor;
-    private ILogger logger;
+    private readonly IFileSystem fileSystem = fileSystem;
+    private readonly IFileProcessor fileProcessor = fileProcessor;
+    private readonly ILogger logger = logger;
 }

@@ -1,3 +1,5 @@
+namespace BlogEngine;
+
 using System.Linq;
 
 public interface IProcessor
@@ -19,6 +21,6 @@ public class Processor : IProcessor
         this.directoryProcessor.Process(posts, inputDir, outputDir);
     }
 
-    private IPostFinder postFinder;
-    private IDirectoryProcessor directoryProcessor;
+    private readonly IPostFinder postFinder;
+    private readonly IDirectoryProcessor directoryProcessor;
 }

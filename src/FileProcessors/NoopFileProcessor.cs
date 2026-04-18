@@ -1,3 +1,5 @@
+namespace BlogEngine.FileProcessors;
+
 using System.Collections.Generic;
 
 public class NoopFileProcessor : IFileProcessor

@@ -1,3 +1,5 @@
+namespace BlogEngine;
+
 using Markdig;
 
 public interface IMarkdownToHtmlConverter
@@ -18,5 +20,5 @@ public class MarkDigConverter : IMarkdownToHtmlConverter
 
     public string Convert(string markDown) => Markdown.ToHtml(markDown, this.pipeline);
 
-    private MarkdownPipeline pipeline;
+    private readonly MarkdownPipeline pipeline;
 }

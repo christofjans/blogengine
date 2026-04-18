@@ -1,3 +1,5 @@
+namespace BlogEngine.FileProcessors;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,11 +13,10 @@ public static class PostsViewModel
     {
         var now = DateTime.Now;
 
-        return posts.Values
-            .Where(p=>p.Rss)
-            .Where(p=>p.Date<now)
-            .OrderByDescending(p=>p.Date)
-            .Select(p=>new PostViewModel(p.Title, p.Date.ToString("yyyy-MM-dd"), Path.GetFileNameWithoutExtension(p.FilePath)+".html", p.Summary))
-            .ToArray();
+        return [.. posts.Values
+            .Where(p => p.Rss)
+            .Where(p => p.Date < now)
+            .OrderByDescending(p => p.Date)
+            .Select(p => new PostViewModel(p.Title, p.Date.ToString("yyyy-MM-dd"), Path.GetFileNameWithoutExtension(p.FilePath) + ".html", p.Summary))];
     }
 }
