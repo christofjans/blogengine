@@ -1,7 +1,9 @@
 namespace BlogEngine;
 
+using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
+using System.Linq;
 
 using BlogEngine.FileProcessors;
 
@@ -16,12 +18,66 @@ public class DirectoryProcessor(IFileSystem fileSystem, IFileProcessor fileProce
 {
     public void Process(Dictionary<string, Post> posts, string inputDir, string outputDir)
     {
-        foreach (var filePath in this.fileSystem.Directory.GetFiles(inputDir))
+        foreach (var filePath in GetFilesToProcess(inputDir))
         {
-            ProcessFile(posts, filePath, outputDir);
+            var fileOutputDir = GetOutputDirectory(inputDir, outputDir, filePath);
+            this.fileSystem.Directory.CreateDirectory(fileOutputDir);
+            ProcessFile(posts, filePath, fileOutputDir);
             logger.LogInformation("processed {filePath}", filePath);
         }
     }
+
+    private IEnumerable<string> GetFilesToProcess(string inputDir) =>
+        EnumerateFiles(inputDir)
+            .Where(filePath => IsRootFile(inputDir, filePath) || !IsRootOnlyFile(filePath));
+
+    private IEnumerable<string> EnumerateFiles(string directoryPath)
+    {
+        foreach (var filePath in this.fileSystem.Directory.GetFiles(directoryPath))
+        {
+            yield return filePath;
+        }
+
+        foreach (var subdirectoryPath in this.fileSystem.Directory.GetDirectories(directoryPath)
+                     .Where(subdirectoryPath => !IsIgnoredDirectory(subdirectoryPath)))
+        {
+            foreach (var filePath in EnumerateFiles(subdirectoryPath))
+            {
+                yield return filePath;
+            }
+        }
+    }
+
+    private string GetOutputDirectory(string inputDir, string outputDir, string filePath)
+    {
+        var fileDirectory = this.fileSystem.Path.GetDirectoryName(filePath) ?? inputDir;
+        var relativeDirectory = this.fileSystem.Path.GetRelativePath(inputDir, fileDirectory);
+
+        return relativeDirectory == "."
+            ? outputDir
+            : this.fileSystem.Path.Combine(outputDir, relativeDirectory);
+    }
+
+    private bool IsRootFile(string inputDir, string filePath) =>
+        string.Equals(
+            this.fileSystem.Path.GetDirectoryName(filePath),
+            inputDir,
+            StringComparison.OrdinalIgnoreCase);
+
+    private bool IsRootOnlyFile(string filePath)
+    {
+        var extension = this.fileSystem.Path.GetExtension(filePath);
+        var fileName = this.fileSystem.Path.GetFileName(filePath);
+
+        return string.Equals(extension, ".md", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(fileName, "rss.json", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private bool IsIgnoredDirectory(string directoryPath) =>
+        string.Equals(
+            this.fileSystem.Path.GetFileName(directoryPath),
+            ".git",
+            StringComparison.OrdinalIgnoreCase);
 
     private void ProcessFile(Dictionary<string, Post> posts, string filePath, string outputDir) =>
         this.fileProcessor.ProcessFile(posts, filePath, outputDir);
