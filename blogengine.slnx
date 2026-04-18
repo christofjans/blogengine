@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="blogengine.csproj" />
+  <Folder Name="/src/">
+    <Project Path="src/blogengine.csproj" />
+  </Folder>
 </Solution>
